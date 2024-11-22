@@ -1,7 +1,9 @@
 <template>
-  <!-- your answer -->
+  <CategoryTemplate :category="category" />
 </template>
 
-<script lang="ts" setup>
-// your answer
+<script setup lang="ts">
+  import CategoryTemplate from './CategoryTemplate.vue';
+  const category = 'Groceries';
 </script>
+

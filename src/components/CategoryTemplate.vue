@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col
-        v-for="product in bestSellerProducts"
+        v-for="product in categoryProducts"
         :key="product.id"
         cols="12"
         md="4"
@@ -18,14 +18,18 @@
   import { useProductStore } from "../stores/ProductStore";
   import StoreItem from "./StoreItem.vue";
 
+  const props = defineProps<{
+    category: string;
+  }>();
+
   const productStore = useProductStore();
 
   onMounted(() => {
     productStore.init();
   });
 
-  const bestSellerProducts = computed(() => 
-    productStore.products.filter(product => product.data.rating > 4.5)
+  const categoryProducts = computed(() => 
+    productStore.products.filter(product => product.data.category === props.category)
   );
 </script>
 

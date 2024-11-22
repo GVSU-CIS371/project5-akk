@@ -1,6 +1,6 @@
 import { ProductDoc } from "./types/product";
 
-export const initProducts: ProductDoc[] = [
+export const initProducts = (): ProductDoc[] => [
   {
     id: "0",
     data: {
@@ -10,28 +10,21 @@ export const initProducts: ProductDoc[] = [
       price: 1200,
       rating: 4,
       stock: 5,
-      //a fake image
-      image:
-        "https://m.media-amazon.com/images/I/31TcnQiBTpL._AC_UF894,1000_QL80_.jpg",
+      image: "https://m.media-amazon.com/images/I/31TcnQiBTpL._AC_UF894,1000_QL80_.jpg",
       category: "Electronics",
     },
-  },
-  // More Electronics
-  {
+  }, {
     id: "1",
     data: {
       name: "SmartTech Pro Phone",
-      description:
-        "Experience cutting-edge technology with our latest SmartTech Pro, featuring an ultra-responsive display and superior camera quality.",
+      description: "Experience cutting-edge technology with our latest SmartTech Pro, featuring an ultra-responsive display and superior camera quality.",
       price: 800,
       rating: 5,
       stock: 10,
       image: "https://m.media-amazon.com/images/I/61L1ItFgFHL.jpg",
       category: "Electronics",
     },
-  },
-  // ... Add more electronics items ...
-  {
+  }, {
     id: "2",
     data: {
       name: "Rapid Dual USB-C Charger",
@@ -60,8 +53,7 @@ export const initProducts: ProductDoc[] = [
         "https://imgs.michaels.com/MAM/assets/1/5E3C12034D34434F8A9BAAFDDF0F8E1B/img/091B833490D74F4C87D5CE3767E806C7/MP236558_11.jpg",
       category: "Clothing",
     },
-  },
-  {
+  }, {
     id: "4",
     data: {
       name: "SleekFit Denim Jeans",
@@ -74,9 +66,7 @@ export const initProducts: ProductDoc[] = [
         "https://benzakdenimdevelopers.com/cdn/shop/products/BDD-006-loomstate-denim-15-oz-RHT-0_720x.jpg?v=1664551915",
       category: "Clothing",
     },
-  },
-  // ... Add more clothing items ...
-  {
+  }, {
     id: "5",
     data: {
       name: "PatternPop Fancy Socks",
@@ -105,8 +95,7 @@ export const initProducts: ProductDoc[] = [
         "https://5.imimg.com/data5/MG/WX/MY-1600400/fresh-apple-500x500.jpg",
       category: "Groceries",
     },
-  },
-  {
+  }, {
     id: "7",
     data: {
       name: "Hearty Whole Grain Bread",
@@ -119,8 +108,7 @@ export const initProducts: ProductDoc[] = [
         "https://vimafoods.com/wp-content/uploads/panecillo-vima-foods.jpg",
       category: "Groceries",
     },
-  },
-  {
+  }, {
     id: "8",
     data: {
       name: "Crunchy Delight Cashews",
@@ -135,3 +123,4 @@ export const initProducts: ProductDoc[] = [
     },
   },
 ];
+
