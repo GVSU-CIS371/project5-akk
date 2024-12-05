@@ -25,6 +25,8 @@ export const useProductStore = defineStore("ProductStore", {
     products: [] as ProductDoc[],
     filteredProducts: [] as ProductDoc[],
   }),
+
+
   actions: {
     async addProduct(newProduct: ProductDoc) {
       const productsCollection = collection(db, "products");
@@ -34,11 +36,10 @@ export const useProductStore = defineStore("ProductStore", {
     },
     async init() {
       const productsCollection = collection(db, "products");
-      const snapshot = await getDocs(productsCollection)
-        .catch((error) => {
-          console.error("Error fetching products from Firestore:", error);
-          return null;
-        });
+      const snapshot = await getDocs(productsCollection).catch((error) => {
+        console.error("Error fetching products from Firestore:", error);
+        return null;
+      });
 
       if (!snapshot || snapshot.empty) {
         console.log("Firestore is empty. Initializing with local data.");
@@ -60,5 +61,24 @@ export const useProductStore = defineStore("ProductStore", {
         this.filteredProducts = this.products;
       }
     },
+    async updateProduct(updatedProduct: ProductDoc) {
+      const productDocRef = doc(db, "products", updatedProduct.id);
+
+      try {
+        // Update the product in Firestore
+        await setDoc(productDocRef, updatedProduct.data);
+
+        // Update the product in the local store
+        const index = this.products.findIndex((p) => p.id === updatedProduct.id);
+        if (index !== -1) {
+          this.products[index] = updatedProduct;
+          this.filteredProducts = [...this.products]; // Ensure reactivity
+        }
+      } catch (error) {
+        console.error("Error updating product:", error);
+      }
+    },
   },
+
+
 });
