@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ProductDoc } from "../types/product";
-import { initProducts } from "../data-init";
-import { collection, getDocs, setDoc, doc, Firestore, getFirestore } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, addDoc, deleteDoc, Firestore, getFirestore } from "firebase/firestore";
 import { FirebaseApp, initializeApp } from "firebase/app";
 
 // Firebase configuration
@@ -27,6 +26,12 @@ export const useProductStore = defineStore("ProductStore", {
     filteredProducts: [] as ProductDoc[],
   }),
   actions: {
+    async addProduct(newProduct: ProductDoc) {
+      const productsCollection = collection(db, "products");
+      const docRef = await addDoc(productsCollection, newProduct.data);
+      this.products.push({ id: docRef.id, data: newProduct.data });
+      this.filteredProducts = this.products;
+    },
     async init() {
       const productsCollection = collection(db, "products");
       const snapshot = await getDocs(productsCollection)
@@ -37,14 +42,6 @@ export const useProductStore = defineStore("ProductStore", {
 
       if (!snapshot || snapshot.empty) {
         console.log("Firestore is empty. Initializing with local data.");
-        const products = initProducts(); // Local initialization data
-
-        await Promise.all(products.map((product) => 
-          setDoc(doc(productsCollection, product.id), product.data)
-        ));
-
-        console.log("Firestore initialized with products.");
-        this.products = products; // Update state with local data
       } else {
         console.log("Products loaded from Firestore.");
         this.products = snapshot.docs.map((doc) => ({
@@ -53,18 +50,15 @@ export const useProductStore = defineStore("ProductStore", {
         })) as ProductDoc[];
       }
 
-      // Sync filteredProducts with loaded data
       this.filteredProducts = this.products;
     },
-    filterByCategory(category: string) {
-      this.filteredProducts = this.products.filter(
-        (product) => product.data.category === category
-      );
-    },
-    filterByRating(minRating: number) {
-      this.filteredProducts = this.products.filter(
-        (product) => product.data.rating >= minRating
-      );
+    async deleteProduct(productId: string) {
+      const productDoc = doc(db, "products", productId);
+      if (window.confirm("Are you sure you want to delete this item?")) {
+        await deleteDoc(productDoc);
+        this.products = this.products.filter((product) => product.id !== productId);
+        this.filteredProducts = this.products;
+      }
     },
   },
 });
