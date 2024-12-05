@@ -53,7 +53,23 @@
             <v-textarea v-model="newProduct.description" label="Product Description" required></v-textarea>
             <v-text-field v-model="newProduct.price" label="Price" type="number" required></v-text-field>
             <v-text-field v-model="newProduct.image" label="Image URL" required></v-text-field>
-            <v-text-field v-model="newProduct.rating" label="Rating (0-5)" type="number" min="0" max="5" required></v-text-field>
+            
+            <!-- Rating Slider -->
+            <v-slider
+              v-model="newProduct.rating"
+              :min="0"
+              :max="5"
+              :step="1"
+              ticks="always"
+              tick-size="4"
+              label="Rating (0-5)"
+              class="mt-3"
+            >
+              <template v-slot:append>
+                <v-label>{{ newProduct.rating }}</v-label>
+              </template>
+            </v-slider>
+
             <v-text-field v-model="newProduct.stock" label="Stock" type="number" required></v-text-field>
             <v-btn type="submit" color="success" class="mt-3">
               {{ isEditing ? "Save Changes" : "Create Product" }}
