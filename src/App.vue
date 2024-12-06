@@ -10,7 +10,7 @@
         v-for="link in links"
         :key="link.text"
         :to="link.to"
-        text
+        
       >
         <v-icon left>{{ link.icon }}</v-icon>
         {{ link.text }}
@@ -122,6 +122,12 @@ const links = ref([
 // Submit New Product
 function submitProduct() {
   if (newProduct.value.name && newProduct.value.description) {
+    // Add a confirmation dialog
+    const confirmation = window.confirm("Are you sure you want to add this product?");
+    if (!confirmation) {
+      return; // Abort if user cancels
+    }
+
     const newProductDoc = {
       id: Date.now().toString(), // Temporary ID generation
       data: { ...newProduct.value },
@@ -131,6 +137,7 @@ function submitProduct() {
     resetForm();
   }
 }
+
 
 // Reset Product Form
 function resetForm() {

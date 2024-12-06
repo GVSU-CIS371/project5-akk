@@ -71,8 +71,17 @@
             </v-slider>
 
             <v-text-field v-model="newProduct.stock" label="Stock" type="number" required></v-text-field>
+            
+            <!-- Save and Cancel Buttons -->
             <v-btn type="submit" color="success" class="mt-3">
-              {{ isEditing ? "Save Changes" : "Create Product" }}
+              Save Changes
+            </v-btn>
+            <v-btn
+              color="red"
+              class="mt-3 ml-2"
+              @click="cancelEdit"
+            >
+              Cancel
             </v-btn>
           </v-form>
         </v-card-text>
@@ -114,28 +123,31 @@ function modifyProduct() {
   newProduct.value = { ...product.data };
 }
 
-// Submit Product (Create or Modify)
-function submitProduct() {
-  if (isEditing.value) {
-    // Update existing product
-    productStore.updateProduct({
-      id: product.id,
-      data: { ...newProduct.value },
-    });
-  } else {
-    // Create new product (if needed elsewhere)
-    const newProductDoc = {
-      id: Date.now().toString(),
-      data: { ...newProduct.value },
-    };
-    productStore.addProduct(newProductDoc);
+// Cancel Edit
+function cancelEdit() {
+  if (window.confirm("Are you sure you want to cancel? Unsaved changes will be lost.")) {
+    resetForm();
+    showDialog.value = false;
+    isEditing.value = false;
   }
-
-  // Reset dialog and form
-  resetForm();
-  showDialog.value = false;
 }
 
+// Submit Product (Modify)
+function submitProduct() {
+  if (window.confirm("Are you sure you want to save these changes?")) {
+    if (isEditing.value) {
+      // Update existing product
+      productStore.updateProduct({
+        id: product.id,
+        data: { ...newProduct.value },
+      });
+    }
+
+    // Reset dialog and form
+    resetForm();
+    showDialog.value = false;
+  }
+}
 // Delete Product
 function deleteProduct() {
   productStore.deleteProduct(product.id);
